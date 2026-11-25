@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14251f">
+  <meta name="description" content="Your personal PET workout tracker and training journal.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>Project Beast Mode</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">YOUR PET PREPARATION JOURNEY</div>
+      <h1>PROJECT <span>BEAST MODE</span></h1>
+      <p class="sub">Every rep counts. Every day builds readiness.</p>
+    </div>
+    <button id="installBtn" class="install hidden" type="button">Install app</button>
+  </header>
+
+  <main>
+    <section class="hero panel">
+      <div class="hero-line">
+        <div><div class="eyebrow">DAILY MISSION</div><h2 id="todayLabel">Today</h2></div>
+        <label class="date-label">Training date <input id="dateInput" type="date"></label>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong id="mandatoryPct">0%</strong><span>Mandatory habits</span></div>
+        <div class="stat"><strong id="optionalDone">0</strong><span>Optional blocks</span></div>
+        <div class="stat"><strong id="petPoints">0</strong><span>PET points today</span></div>
+      </div>
+      <div class="progress-track"><div id="mandatoryBar" class="progress-fill"></div></div>
+      <p class="hint" id="missionHint">Complete priorities 1 and 5. Choose optional training when time and recovery allow.</p>
+    </section>
+
+    <nav class="tabs" aria-label="Main navigation">
+      <button class="tab active" data-tab="today">Today</button>
+      <button class="tab" data-tab="analysis">Analysis</button>
+      <button class="tab" data-tab="records">PET records</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </nav>
+
+    <section id="today" class="view active">
+      <div class="section-head"><div><div class="eyebrow">PRIORITY SYSTEM</div><h2>Daily checklist</h2></div><span class="pill green">1 &amp; 5 mandatory</span></div>
+      <div id="workoutGroups"></div>
+      <section class="panel pet-panel">
+        <div class="section-head"><div><div class="eyebrow">PRIORITY 6 · OPTIONAL</div><h2>PET event practice</h2></div><span class="pill amber">+10 each</span></div>
+        <p class="hint">Choose any event you actually practise. Tick it only after completing the session and recording what you did.</p>
+        <div id="petEvents" class="event-grid"></div>
+        <div class="points-line"><span>Today's completed PET practices</span><strong id="eventPoints">0 points</strong></div>
+      </section>
+      <section class="panel">
+        <h2>Daily reflection</h2>
+        <div class="field"><label for="energy">Energy today</label><select id="energy"><option value="">Choose…</option><option>Low</option><option>Moderate</option><option>Good</option><option>Excellent</option></select></div>
+        <div class="field"><label for="fatigue">Fatigue / soreness</label><select id="fatigue"><option value="">Choose…</option><option>None</option><option>Mild</option><option>Moderate</option><option>High</option></select></div>
+        <div class="field"><label for="pain">Pain or discomfort?</label><select id="pain"><option value="">Choose…</option><option>No</option><option>Yes – stopped or modified training</option></select></div>
+        <div class="field"><label for="notes">Notes / actual performance</label><textarea id="notes" rows="3" placeholder="Example: Jogged 2.1 km; pull-ups 3×8; felt good…"></textarea></div>
+        <button id="saveReflection" class="primary">Save today's reflection</button>
+        <p id="saveStatus" class="hint" aria-live="polite"></p>
+      </section>
+    </section>
+
+    <section id="analysis" class="view">
+      <div class="section-head"><div><div class="eyebrow">TRAINING INTELLIGENCE</div><h2>Progress analysis</h2></div></div>
+      <div class="panel">
+        <h3>This week</h3>
+        <div class="stats compact">
+          <div class="stat"><strong id="weekMandatory">0%</strong><span>Mandatory completion</span></div>
+          <div class="stat"><strong id="weekSessions">0</strong><span>PET sessions</span></div>
+          <div class="stat"><strong id="weekPoints">0</strong><span>PET points</span></div>
+        </div>
+        <div id="weekBars" class="bar-list"></div>
+      </div>
+      <div class="panel">
+        <h3>This month</h3>
+        <div class="stats compact">
+          <div class="stat"><strong id="monthMandatory">0%</strong><span>Mandatory completion</span></div>
+          <div class="stat"><strong id="monthSessions">0</strong><span>PET sessions</span></div>
+          <div class="stat"><strong id="monthPoints">0</strong><span>PET points</span></div>
+        </div>
+        <p class="hint">Benefits below are potential training adaptations, not guaranteed outcomes. Your actual progress is determined by recorded times, distances and repetitions.</p>
+        <ul class="benefits">
+          <li><b>Sprint practice:</b> may improve acceleration and running mechanics.</li>
+          <li><b>Jump practice:</b> may improve take-off coordination, power and landing skill.</li>
+          <li><b>1500m practice:</b> may improve aerobic endurance and pacing.</li>
+          <li><b>Strength work:</b> may improve muscular strength and endurance.</li>
+          <li><b>Consistent recovery:</b> supports adaptation and helps manage fatigue.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Recent daily history</h3>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </section>
+
+    <section id="records" class="view">
+      <div class="section-head"><div><div class="eyebrow">MEASURE WHAT MATTERS</div><h2>PET performance records</h2></div></div>
+      <div class="panel">
+        <p class="hint">Enter measured results. Use the same units each time. Add verified qualifying standards from your official notification; this app does not invent them.</p>
+        <form id="recordForm">
+          <div class="field"><label for="recordDate">Test date</label><input id="recordDate" type="date" required></div>
+          <div class="field"><label for="eventType">Event</label><select id="eventType"><option>100m sprint (seconds)</option><option>1500m run (mm:ss)</option><option>Long jump (metres)</option><option>High jump (centimetres)</option><option>Pull-ups (repetitions)</option><option>Rope climb (seconds / notes)</option><option>Shot put (metres)</option></select></div>
+          <div class="field"><label for="recordValue">Measured result</label><input id="recordValue" required placeholder="e.g. 15.2 or 1.85"></div>
+          <div class="field"><label for="recordNotes">Notes (optional)</label><input id="recordNotes" placeholder="Surface, conditions, technique…"></div>
+          <button class="primary" type="submit">Save performance record</button>
+        </form>
+      </div>
+      <div class="panel"><h3>Recorded results</h3><div id="recordsList" class="history-list"></div></div>
+    </section>
+
+    <section id="settings" class="view">
+      <div class="section-head"><div><div class="eyebrow">PERSONAL SETTINGS</div><h2>Mission setup</h2></div></div>
+      <div class="panel">
+        <div class="field"><label for="examDate">PET / examination date (optional)</label><input id="examDate" type="date"></div>
+        <div class="field"><label for="weekStart">Week starts on</label><select id="weekStart"><option value="1">Monday</option><option value="0">Sunday</option></select></div>
+        <button id="saveSettings" class="primary">Save settings</button>
+      </div>
+      <div class="panel">
+        <h3>Your data belongs to you</h3>
+        <p class="hint">Your entries are saved in this browser on this device. Export a backup regularly. Clearing browser data or changing devices can remove access to local records.</p>
+        <div class="button-row"><button id="exportBtn" class="secondary">Export backup (JSON)</button><button id="csvBtn" class="secondary">Export history (CSV)</button></div>
+        <label class="file-button">Import backup (JSON)<input id="importFile" type="file" accept="application/json"></label>
+        <button id="resetBtn" class="danger">Delete all app data</button>
+      </div>
+      <div class="panel">
+        <h3>Training safety</h3>
+        <p class="hint">Build volume gradually. Do not force the written repetitions if they exceed your current capacity. Stop for sharp pain, dizziness, chest pain or unusual breathlessness; seek medical advice when needed. Schedule recovery between demanding sprint and jump sessions.</p>
+      </div>
+    </section>
+  </main>
+  <footer>PROJECT BEAST MODE · DISCIPLINE • PERFORMANCE • RECOVERY</footer>
+  <script src="app.js"></script>
+</body>
+</html>
